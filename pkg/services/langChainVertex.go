@@ -17,26 +17,29 @@ limitations under the License.
 // This file contains the code for the Chat function, which uses the
 // Google Cloud VertexAI Codey API to generate text responses to user prompts.
 
-package genai
+package genaiService
 
 import (
 	"context"
 	"log"
 
 	"github.com/tmc/langchaingo/llms"
+	"github.com/tmc/langchaingo/llms/googleai"
 	"github.com/tmc/langchaingo/llms/googleai/vertex"
 )
 
 func LangChainVertexChat(prompt string) string {
 	ctx := context.Background()
 	// project := os.Getenv("VERTEX_PROJECT")
-	project := "coffee-and-codey"
+	project := "devai-demo"
 	// location := os.Getenv("VERTEX_LOCATION")
-	location := "us-central1"
-	llm, err := vertex.New(ctx,
-		vertex.WithCloudProject(project),
-		vertex.WithCloudLocation(location))
-
+	region := "us-central1"
+	llm, err := vertex.New(
+		ctx,
+		googleai.WithCloudProject(project),
+		googleai.WithCloudLocation(region),
+		// googleai.WithCredentialsFile(credentialsJSONFile),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}

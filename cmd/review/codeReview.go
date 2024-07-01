@@ -19,22 +19,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 
-	"github.com/kyokomi/emoji"
-	"github.com/olekukonko/tablewriter"
+	// "github.com/kyokomi/emoji"
+	// "github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
 	utils "buildey/pkg/common"
-	genai "buildey/pkg/services"
+	genaiService "buildey/pkg/services"
 )
 
 // ReviewItem represents a review question and its details.
-type ReviewItem struct {
-	Question    string `json:"question"`
-	Answer      string `json:"answer"`
-	Description string `json:"description"`
-}
 
 var (
 	codeFile   string
@@ -172,60 +166,27 @@ func codeReview() {
 	// fmt.Println(chatPrompt)
 	fmt.Println("Generating and printing the code review.")
 
-	output := genai.LangChainVertexChat(chatPrompt)
-
-	// Find the index of the first '{' character
-	startIndex := strings.Index(output, "[")
-	if startIndex == -1 {
-		fmt.Fprintln(os.Stderr, "Error: JSON output does not contain '{'")
-		return
-	}
-
-	// Find the index of the last '```' sequence
-	endIndex := strings.LastIndex(output, "```")
-	if endIndex == -1 {
-		fmt.Fprintln(os.Stderr, "Error: JSON output does not contain '```'")
-		return
-	}
-
-	// Extract the JSON content between '{' and '```'
-	jsonContent := output[startIndex : endIndex-1]
-
-	// Print to screen to help with troubleshooting
-	// fmt.Println(jsonContent)
-
-	// Parse JSON content into a slice of ReviewItem structs
-	var reviewItems []ReviewItem
-	err = json.Unmarshal([]byte(jsonContent), &reviewItems)
+	// response := genaiService.LangChainVertexChat(chatPrompt)
+	response, err := genaiService.VertexChatText(chatPrompt)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error parsing JSON:", err)
+		fmt.Printf("Error calling VertexChatText: %v\n", err)
 		return
 	}
 
-	// Display the data in a table format
-	displayTable(reviewItems)
-}
-
-// displayTable displays review items in a table format.
-func displayTable(data []ReviewItem) {
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Question", "Answer", "Description"})
-
-	for _, item := range data {
-		// Use emoji ticks and crosses for "yes" and "no" answers
-		var answerDisplay string
-		if item.Answer == "yes" {
-			answerDisplay = emoji.Sprint(":white_check_mark:")
-		} else if item.Answer == "no" {
-			answerDisplay = emoji.Sprint(":x:")
-		} else {
-			answerDisplay = item.Answer // If not "yes" or "no", display as-is
-		}
-
-		table.Append([]string{item.Question, answerDisplay, item.Description})
+	// Parse JSON response
+	var reviewItems []utils.ReviewItem
+	err = json.Unmarshal([]byte(response), &reviewItems) // Unmarshall directly into reviewItems
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error parsing JSON response: %v\n", err)
+		return
 	}
 
-	table.Render()
+	// tableContents := utils.CreateTable(reviewItems, "markdown")
+	tableContents := utils.CreateTable(reviewItems, "cli")
+
+	fmt.Println(tableContents)
+	// fmt.Println(response) // Print the JSON response
+
 }
 
 // codeReviewCmd represents the codeReview command

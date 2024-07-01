@@ -16,7 +16,7 @@ limitations under the License.
 
 // This file contains the code for the Chat function, which uses the
 // Google Cloud VertexAI Codey API to generate text responses to user prompts.
-package genai
+package genaiService
 
 import (
 	"bytes"

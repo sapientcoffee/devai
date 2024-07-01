@@ -19,9 +19,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	file string
-)
+// var (
+// 	file string
+// )
 
 // reviewCmd represents the review command
 var ReviewCmd = &cobra.Command{

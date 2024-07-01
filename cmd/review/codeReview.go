@@ -20,15 +20,11 @@ import (
 	"fmt"
 	"os"
 
-	// "github.com/kyokomi/emoji"
-	// "github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
 	utils "buildey/pkg/common"
 	genaiService "buildey/pkg/services"
 )
-
-// ReviewItem represents a review question and its details.
 
 var (
 	codeFile   string
@@ -173,9 +169,15 @@ func codeReview() {
 		return
 	}
 
+	validatedJSON, err := utils.ValidateJSON(response)
+	if err != nil {
+		fmt.Printf("error validating JSON:  %v\n", err)
+		return
+	}
+
 	// Parse JSON response
 	var reviewItems []utils.ReviewItem
-	err = json.Unmarshal([]byte(response), &reviewItems) // Unmarshall directly into reviewItems
+	err = json.Unmarshal([]byte(validatedJSON), &reviewItems) // Unmarshall directly into reviewItems
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error parsing JSON response: %v\n", err)
 		return
@@ -196,24 +198,9 @@ var codeReviewCmd = &cobra.Command{
 	Long:  `Assists with code reviews and generates a table with AI review results. The goal is to help with the "heavy" lifting of code reviews to allow the reviewer to focus on adding value.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		gitFlag, err := cmd.Flags().GetString("git")
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading git flag:", err)
-			return
-		}
 		fileFlag, err := cmd.Flags().GetString("file")
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading file flag:", err)
-			return
-		}
-		// promptFlag, err = cmd.Flags().GetString("prompt")
-		// if err != nil {
-		// 	fmt.Fprintln(os.Stderr, "Error reading prompt flag:", err)
-		// 	return
-		// }
-
-		if gitFlag != "" {
-			fmt.Println("Git flag is not yet implemented:", gitFlag)
 			return
 		}
 

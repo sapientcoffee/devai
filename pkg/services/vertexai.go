@@ -25,8 +25,6 @@ import (
 	"log"
 	"strings"
 
-	utils "buildey/pkg/common"
-
 	"cloud.google.com/go/vertexai/genai"
 )
 
@@ -116,10 +114,12 @@ func VertexChatText(chatPrompt string) (string, error) {
 
 	// Join the decoded string parts into a single string
 	// Validate the JSON before returning
-	validatedJSON, err := utils.ValidateJSON(strings.Join(parts, ""))
-	if err != nil {
-		return "", fmt.Errorf("error validating JSON: %w", err)
-	}
-	return validatedJSON, nil
+	// validatedJSON, err := utils.ValidateJSON(strings.Join(parts, ""))
+	// if err != nil {
+	// 	return "", fmt.Errorf("error validating JSON: %w", err)
+	// }
+	// return validatedJSON, nil
+
+	return strings.Join(parts, ""), nil
 
 }

@@ -17,9 +17,51 @@ package review
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
+
+	utils "buildey/pkg/common"
+	genaiService "buildey/pkg/services"
 )
+
+func performanceReview() {
+	code, err := utils.ReadFileContents(codeFile)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error reading file:", err)
+		return
+	}
+
+	chatPrompt := utils.BuildChatPrompt(
+		`Please optimize and specifically describe the changes you would make
+		`,
+		promptFlag, code)
+
+	fmt.Println("Generating and printing the performance review. Output in valid json format.")
+
+	// Select which module will be used to call vertex, options are LangChainVertexChat or VertexChatText which uses vertexai SDK
+	// response := genaiService.LangChainVertexChat(chatPrompt)
+	response, err := genaiService.VertexChatText(chatPrompt)
+	if err != nil {
+		fmt.Printf("Error calling VertexChatText: %v\n", err)
+		return
+	}
+
+	// Parse JSON response
+	// var reviewItems []utils.ReviewItem
+	// err = json.Unmarshal([]byte(response), &reviewItems) // Unmarshall directly into reviewItems
+	// if err != nil {
+	// 	fmt.Fprintf(os.Stderr, "Error parsing JSON response: %v\n", err)
+	// 	return
+	// }
+
+	// tableContents := utils.CreateTable(reviewItems, "markdown")
+	// tableContents := utils.CreateTable(reviewItems, "cli")
+
+	// fmt.Println(tableContents)
+	fmt.Println(response)
+
+}
 
 // performanceReviewCmd represents the performanceReview command
 var performanceReviewCmd = &cobra.Command{
@@ -32,12 +74,28 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("performanceReview called")
+		// fmt.Println("performanceReview called")
 
+		fileFlag, err := cmd.Flags().GetString("file")
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error reading file flag:", err)
+			return
+		}
+
+		if fileFlag != "" {
+			codeFile = fileFlag
+		} else {
+			fmt.Println("No file specified, using default.")
+			codeFile = "../example_code/coffee.go" // Consider moving default to a constant
+		}
+		fmt.Println("Performance Review for " + fileFlag + " .....")
+		performanceReview()
 	},
 }
 
 func init() {
+
+	performanceReviewCmd.Flags().StringP("file", "f", "", "The file containing the code to be reviewed")
 
 	// Here you will define your flags and configuration settings.
 

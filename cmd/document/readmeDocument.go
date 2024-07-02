@@ -22,7 +22,7 @@ import (
 	"github.com/spf13/cobra"
 
 	utils "buildey/pkg/common"
-	genai "buildey/pkg/services"
+	genaiService "buildey/pkg/services"
 )
 
 var (
@@ -39,7 +39,13 @@ func generateReadme() {
 	chatPrompt := utils.BuildChatPrompt("Write documentation, in markdown, following DORA, stc.org, and writethedocs.org guidelines", promptFlag, code)
 
 	fmt.Println("Generating and printing the release notes.")
-	fmt.Println(genai.LangChainVertexChat(chatPrompt))
+
+	response, err := genaiService.GetAIResponse(chatPrompt, "")
+	if err != nil {
+		fmt.Printf("Error calling VertexChatText: %v\n", err)
+		return
+	}
+	fmt.Println(response)
 
 }
 
@@ -49,24 +55,10 @@ var readmeCmd = &cobra.Command{
 	Short: "Create readme.md for the code passed in for documentation purposes.",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		gitFlag, err := cmd.Flags().GetString("git")
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading git flag:", err)
-			return
-		}
+
 		fileFlag, err := cmd.Flags().GetString("file")
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading file flag:", err)
-			return
-		}
-		promptFlag, err = cmd.Flags().GetString("prompt")
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading prompt flag:", err)
-			return
-		}
-
-		if gitFlag != "" {
-			fmt.Println("Git flag is not yet implemented:", gitFlag)
 			return
 		}
 
@@ -76,13 +68,12 @@ var readmeCmd = &cobra.Command{
 			fmt.Println("No file specified, using default.")
 			codeFile = "../example_code/coffee.go" // Consider moving default to a constant
 		}
-
+		fmt.Println("Readme for " + fileFlag + " .....")
 		generateReadme()
 	},
 }
 
 func init() {
-	readmeCmd.Flags().StringP("git", "g", "", "The Git repo location to use for this action")
 	readmeCmd.Flags().StringP("file", "f", "", "The file to use for this action")
 
 	DocumentCmd.AddCommand(readmeCmd)

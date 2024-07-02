@@ -21,7 +21,7 @@ import (
 	"os"
 
 	utils "buildey/pkg/common"
-	genai "buildey/pkg/services"
+	genaiService "buildey/pkg/services"
 
 	"github.com/spf13/cobra"
 )
@@ -36,7 +36,8 @@ func generateReleaseNotes() {
 	chatPrompt := utils.BuildChatPrompt("Create detailed release notes", promptFlag, code)
 
 	fmt.Println("Generating and printing the release notes.")
-	fmt.Println(genai.LangChainVertexChat(chatPrompt))
+
+	fmt.Println(genaiService.GetAIResponse(chatPrompt, ""))
 
 }
 
@@ -55,11 +56,6 @@ var releaseCmd = &cobra.Command{
 			fmt.Fprintln(os.Stderr, "Error reading file flag:", err)
 			return
 		}
-		promptFlag, err = cmd.Flags().GetString("prompt")
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading prompt flag:", err)
-			return
-		}
 
 		if gitFlag != "" {
 			fmt.Println("Git flag is not yet implemented:", gitFlag)
@@ -72,7 +68,7 @@ var releaseCmd = &cobra.Command{
 			fmt.Println("No file specified, using default.")
 			codeFile = "../example_code/coffee.go" // Consider moving default to a constant
 		}
-
+		fmt.Println("Release Notes for " + fileFlag + " .....")
 		generateReleaseNotes()
 	},
 }

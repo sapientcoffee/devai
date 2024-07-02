@@ -162,10 +162,12 @@ func codeReview() {
 	// fmt.Println(chatPrompt)
 	fmt.Println("Generating and printing the code review.")
 
-	// response := genaiService.LangChainVertexChat(chatPrompt)
-	response, err := genaiService.VertexChatText(chatPrompt)
+	response, err := genaiService.GetAIResponse(chatPrompt, "")
+	// response, err := genaiService.GetAIResponse(chatPrompt, "VertexEngine") //VertexEngine or LangChainEngine or CodeyEngine
+
+	// response, err := genaiService.GetAIResponse(chatPrompt)
 	if err != nil {
-		fmt.Printf("Error calling VertexChatText: %v\n", err)
+		fmt.Printf("Error getting AI response: %v\n", err)
 		return
 	}
 

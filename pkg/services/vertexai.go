@@ -54,6 +54,8 @@ func VertexChatText(chatPrompt string) (string, error) {
 	//   - gemini-pro: The most powerful model with the best performance.
 	model := "gemini-1.5-pro"
 
+	// model := "gemini-1.5-flash-001"
+	fmt.Println(model)
 	// Create a context for the API call.
 	ctx := context.Background()
 

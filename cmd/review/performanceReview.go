@@ -41,7 +41,8 @@ func performanceReview() {
 
 	// Select which module will be used to call vertex, options are LangChainVertexChat or VertexChatText which uses vertexai SDK
 	// response := genaiService.LangChainVertexChat(chatPrompt)
-	response, err := genaiService.VertexChatText(chatPrompt)
+	response, err := genaiService.GetAIResponse(chatPrompt, "")
+	// response, err := genaiService.VertexChatText(chatPrompt)
 	if err != nil {
 		fmt.Printf("Error calling VertexChatText: %v\n", err)
 		return

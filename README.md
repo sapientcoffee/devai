@@ -53,7 +53,7 @@ devai/
   ```
   go run main.go
   go run main.go --help
-  go run main .go review code
+  go run main.go review code
   ```
 
 

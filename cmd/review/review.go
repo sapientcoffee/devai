@@ -36,6 +36,7 @@ var ReviewCmd = &cobra.Command{
 func init() {
 	ReviewCmd.AddCommand(codeReviewCmd)
 	ReviewCmd.AddCommand(performanceReviewCmd)
+	ReviewCmd.AddCommand(archReviewCmd)
 
 	codeReviewCmd.Flags().StringP("git", "g", "", "The Git repo location to use for this action")
 

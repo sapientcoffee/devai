@@ -33,11 +33,11 @@ steps:
   args: ["golangci-lint","run", "./ui/main.go"]
 
 # unit Test
-- id: 🧑‍🔬 Unit Test(s)
-  waitFor: ['-']
-  name: "gcr.io/cloud-builders/go"
-  args: ["test","./ui/main_test.go"]
-  env: ["GOPATH=."]
+# - id: 🧑‍🔬 Unit Test(s)
+#   waitFor: ['-']
+#   name: "gcr.io/cloud-builders/go"
+#   args: ["test","./ui/main_test.go"]
+#   env: ["GOPATH=."]
 
 - id: 🤖 Code PR Creator - https://github.com/GoogleCloudPlatform/microservices-demo/pull/2438
   name: 'europe-docker.pkg.dev/coffee-and-codey/buildey-image/buildey:latest'

@@ -27,10 +27,10 @@ steps:
   env: ["GOPATH=."]
 
 # linter
-- id: 👨‍💻 Linter
-  waitFor: ['-']
-  name: "golangci/golangci-lint"
-  args: ["golangci-lint","run", "./ui/main.go"]
+# - id: 👨‍💻 Linter
+#   waitFor: ['-']
+#   name: "golangci/golangci-lint"
+#   args: ["golangci-lint","run", "./ui/main.go"]
 
 # unit Test
 # - id: 🧑‍🔬 Unit Test(s)

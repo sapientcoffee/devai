@@ -52,7 +52,7 @@ func VertexChatText(chatPrompt string) (string, error) {
 	//   - gemini-1.5-flash-001: A fast and efficient model.
 	//   - gemini-1.5-pro: A more powerful model with better performance.
 	//   - gemini-pro: The most powerful model with the best performance.
-	model := "gemini-1.5-pro"
+	model := "gemini-1.5-pro-002"
 
 	// model := "gemini-1.5-flash-001"
 	fmt.Println(model)

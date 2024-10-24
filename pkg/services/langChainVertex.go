@@ -31,7 +31,7 @@ import (
 func LangChainVertexChat(prompt string) string {
 	ctx := context.Background()
 	// project := os.Getenv("VERTEX_PROJECT")
-	project := "devai-demo"
+	project := "coffee-and-codey"
 	// location := os.Getenv("VERTEX_LOCATION")
 	region := "us-central1"
 	llm, err := vertex.New(

@@ -44,7 +44,7 @@ func VertexChatText(chatPrompt string) (string, error) {
 
 	// project := os.Getenv("PROJECT_ID")
 	// location := os.Getenv("REGION")
-	project := "devai-demo"
+	project := "coffee-and-codey"
 	region := "us-central1"
 
 	// Choose the desired VertexAI model.

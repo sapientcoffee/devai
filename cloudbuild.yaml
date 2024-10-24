@@ -1,0 +1,23 @@
+# Copyright 2024 Google LLC.
+# Cloud Build steps to build the container image with the buildy binary
+
+
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--tag=europe-docker.pkg.dev/$PROJECT_ID/buildey-image/buildey:latest'
+  - '-f'
+  - 'Dockerfile'
+  - '.'
+  id: Build Container Image
+
+# Simple sanity check: invoke the new gcloud container to confirm that it was built correctly.
+- name: 'europe-docker.pkg.dev/$PROJECT_ID/buildey-image/buildey:latest'
+  args: ['buildey', 'info']
+  id: Sanity Check - should output help
+
+images:
+- 'europe-docker.pkg.dev/$PROJECT_ID/buildey-image/buildey'
+
+timeout: 2400s

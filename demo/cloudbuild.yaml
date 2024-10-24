@@ -1,44 +1,4 @@
 steps:
-# increase depth of git clone and diff
-- id: 🗂️ Reset git to unshallow
-  name: gcr.io/cloud-builders/git
-  args:
-    - fetch
-    - '--unshallow'
-- id: 🗂️ Pulling git history
-  name: gcr.io/cloud-builders/git
-  args:
-    - pull
-    - origin
-    - $REF_NAME
-- id: 🗂️ Comparing latest and most recent commits
-  name: gcr.io/cloud-builders/git
-  args:
-    - diff
-    - HEAD~1
-    - '--output'
-    - diff.txt
-
-# ⁉️ Golang versions
-- id: ⁉️ Golang Versions
-  waitFor: ['-']
-  name: "gcr.io/cloud-builders/go"
-  args: ["version"]
-  env: ["GOPATH=."]
-
-# linter
-# - id: 👨‍💻 Linter
-#   waitFor: ['-']
-#   name: "golangci/golangci-lint"
-#   args: ["golangci-lint","run", "./ui/main.go"]
-
-# unit Test
-# - id: 🧑‍🔬 Unit Test(s)
-#   waitFor: ['-']
-#   name: "gcr.io/cloud-builders/go"
-#   args: ["test","./ui/main_test.go"]
-#   env: ["GOPATH=."]
-
 - id: 🤖 Code PR Creator - https://github.com/GoogleCloudPlatform/microservices-demo/pull/2438
   name: 'europe-docker.pkg.dev/coffee-and-codey/buildey-image/buildey:latest'
   args:
@@ -68,9 +28,6 @@ steps:
     - -f 
     - "demo/sample-code/2438-diff.txt"
   allowFailure: true
-
-
-
 
 options:
   # logging: CLOUD_LOGGING_ONLY

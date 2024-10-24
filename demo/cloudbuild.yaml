@@ -1,4 +1,12 @@
 steps:
+
+- id: 🤖 Buildey Check
+  name: 'europe-docker.pkg.dev/coffee-and-codey/buildey-image/buildey:latest'
+  args:
+    - buildey
+    - info
+  allowFailure: true
+
 - id: 🤖 Code PR Creator - https://github.com/GoogleCloudPlatform/microservices-demo/pull/2438
   name: 'europe-docker.pkg.dev/coffee-and-codey/buildey-image/buildey:latest'
   args:

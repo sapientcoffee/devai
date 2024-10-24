@@ -1,0 +1,480 @@
+diff --git a/.github/workflows/ci-pr.yaml b/.github/workflows/ci-pr.yaml
+index 728b711e63e..ca0c01c72a0 100644
+--- a/.github/workflows/ci-pr.yaml
++++ b/.github/workflows/ci-pr.yaml
+@@ -49,9 +49,9 @@ jobs:
+     - name: Go Unit Tests
+       timeout-minutes: 10
+       run: |
+-        for SERVICE in "shippingservice" "productcatalogservice"; do
+-          echo "testing $SERVICE..."
+-          pushd src/$SERVICE
++        for GO_PACKAGE in "shippingservice" "productcatalogservice" "frontend/validator"; do
++          echo "Testing $GO_PACKAGE..."
++          pushd src/$GO_PACKAGE
+           go test
+           popd
+         done
+diff --git a/src/frontend/go.mod b/src/frontend/go.mod
+index 034f65e35b7..2dae45c3256 100644
+--- a/src/frontend/go.mod
++++ b/src/frontend/go.mod
+@@ -24,14 +24,19 @@ require (
+ 	cloud.google.com/go/compute v1.23.3 // indirect
+ 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
+ 	github.com/felixge/httpsnoop v1.0.4 // indirect
++	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
+ 	github.com/go-logr/logr v1.4.1 // indirect
+ 	github.com/go-logr/stdr v1.2.2 // indirect
++	github.com/go-playground/locales v0.14.1 // indirect
++	github.com/go-playground/universal-translator v0.18.1 // indirect
++	github.com/go-playground/validator/v10 v10.19.0 // indirect
+ 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
+ 	github.com/google/pprof v0.0.0-20230602150820-91b7bce49751 // indirect
+ 	github.com/google/s2a-go v0.1.7 // indirect
+ 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
+ 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
+ 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
++	github.com/leodido/go-urn v1.4.0 // indirect
+ 	go.opencensus.io v0.24.0 // indirect
+ 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.24.0 // indirect
+ 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
+diff --git a/src/frontend/go.sum b/src/frontend/go.sum
+index e22745c8d82..1b565af87b6 100644
+--- a/src/frontend/go.sum
++++ b/src/frontend/go.sum
+@@ -24,11 +24,19 @@ github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1m
+ github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
+ github.com/felixge/httpsnoop v1.0.4 h1:NFTV2Zj1bL4mc9sqWACXbQFVBBg2W3GPvqp8/ESS2Wg=
+ github.com/felixge/httpsnoop v1.0.4/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
++github.com/gabriel-vasile/mimetype v1.4.3 h1:in2uUcidCuFcDKtdcBxlR0rJ1+fsokWf+uqxgUFjbI0=
++github.com/gabriel-vasile/mimetype v1.4.3/go.mod h1:d8uq/6HKRL6CGdk+aubisF/M5GcPfT7nKyLpA0lbSSk=
+ github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
+ github.com/go-logr/logr v1.4.1 h1:pKouT5E8xu9zeFC39JXRDukb6JFQPXM5p5I91188VAQ=
+ github.com/go-logr/logr v1.4.1/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
+ github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=
+ github.com/go-logr/stdr v1.2.2/go.mod h1:mMo/vtBO5dYbehREoey6XUKy/eSumjCCveDpRre4VKE=
++github.com/go-playground/locales v0.14.1 h1:EWaQ/wswjilfKLTECiXz7Rh+3BjFhfDFKv/oXslEjJA=
++github.com/go-playground/locales v0.14.1/go.mod h1:hxrqLVvrK65+Rwrd5Fc6F2O76J/NuW9t0sjnWqG1slY=
++github.com/go-playground/universal-translator v0.18.1 h1:Bcnm0ZwsGyWbCzImXv+pAJnYK9S473LQFuzCbDbfSFY=
++github.com/go-playground/universal-translator v0.18.1/go.mod h1:xekY+UJKNuX9WP91TpwSH2VMlDf28Uj24BCp08ZFTUY=
++github.com/go-playground/validator/v10 v10.19.0 h1:ol+5Fu+cSq9JD7SoSqe04GMI92cbn0+wvQ3bZ8b/AU4=
++github.com/go-playground/validator/v10 v10.19.0/go.mod h1:dbuPbCMFw/DrkbEynArYaCwl3amGuJotoKCe95atGMM=
+ github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
+ github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
+ github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da h1:oI5xCqsCo564l8iNU+DwB5epxmsaqB+rhGL0m5jtYqE=
+@@ -73,6 +81,8 @@ github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
+ github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
+ github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 h1:Wqo399gCIufwto+VfwCSvsnfGpF/w5E9CNxSwbpD6No=
+ github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0/go.mod h1:qmOFXW2epJhM0qSnUUYpldc7gVz2KMQwJ/QYCDIa7XU=
++github.com/leodido/go-urn v1.4.0 h1:WT9HwE9SGECu3lg4d/dIA+jxlljEa1/ffXKmRjqdmIQ=
++github.com/leodido/go-urn v1.4.0/go.mod h1:bvxc+MVxLKB4z00jd1z+Dvzr47oO32F/QSNjSBOlFxI=
+ github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+diff --git a/src/frontend/handlers.go b/src/frontend/handlers.go
+index 1c56a2cc549..125116389d5 100644
+--- a/src/frontend/handlers.go
++++ b/src/frontend/handlers.go
+@@ -32,6 +32,7 @@ import (
+ 
+ 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
+ 	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/money"
++	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/validator"
+ )
+ 
+ type platformDetails struct {
+@@ -224,19 +225,23 @@ func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Reques
+ 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
+ 	quantity, _ := strconv.ParseUint(r.FormValue("quantity"), 10, 32)
+ 	productID := r.FormValue("product_id")
+-	if productID == "" || quantity == 0 {
+-		renderHTTPError(log, r, w, errors.New("invalid form input"), http.StatusBadRequest)
++	payload := validator.AddToCartPayload{
++		Quantity:  quantity,
++		ProductID: productID,
++	}
++	if err := payload.Validate(); err != nil {
++		renderHTTPError(log, r, w, validator.ValidationErrorResponse(err), http.StatusUnprocessableEntity)
+ 		return
+ 	}
+-	log.WithField("product", productID).WithField("quantity", quantity).Debug("adding to cart")
++	log.WithField("product", payload.ProductID).WithField("quantity", payload.Quantity).Debug("adding to cart")
+ 
+-	p, err := fe.getProduct(r.Context(), productID)
++	p, err := fe.getProduct(r.Context(), payload.ProductID)
+ 	if err != nil {
+ 		renderHTTPError(log, r, w, errors.Wrap(err, "could not retrieve product"), http.StatusInternalServerError)
+ 		return
+ 	}
+ 
+-	if err := fe.insertCart(r.Context(), sessionID(r), p.GetId(), int32(quantity)); err != nil {
++	if err := fe.insertCart(r.Context(), sessionID(r), p.GetId(), int32(payload.Quantity)); err != nil {
+ 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to add to cart"), http.StatusInternalServerError)
+ 		return
+ 	}
+@@ -350,22 +355,39 @@ func (fe *frontendServer) placeOrderHandler(w http.ResponseWriter, r *http.Reque
+ 		ccCVV, _      = strconv.ParseInt(r.FormValue("credit_card_cvv"), 10, 32)
+ 	)
+ 
++	payload := validator.PlaceOrderPayload{
++		Email:         email,
++		StreetAddress: streetAddress,
++		ZipCode:       zipCode,
++		City:          city,
++		State:         state,
++		Country:       country,
++		CcNumber:      ccNumber,
++		CcMonth:       ccMonth,
++		CcYear:        ccYear,
++		CcCVV:         ccCVV,
++	}
++	if err := payload.Validate(); err != nil {
++		renderHTTPError(log, r, w, validator.ValidationErrorResponse(err), http.StatusUnprocessableEntity)
++		return
++	}
++
+ 	order, err := pb.NewCheckoutServiceClient(fe.checkoutSvcConn).
+ 		PlaceOrder(r.Context(), &pb.PlaceOrderRequest{
+-			Email: email,
++			Email: payload.Email,
+ 			CreditCard: &pb.CreditCardInfo{
+-				CreditCardNumber:          ccNumber,
+-				CreditCardExpirationMonth: int32(ccMonth),
+-				CreditCardExpirationYear:  int32(ccYear),
+-				CreditCardCvv:             int32(ccCVV)},
++				CreditCardNumber:          payload.CcNumber,
++				CreditCardExpirationMonth: int32(payload.CcMonth),
++				CreditCardExpirationYear:  int32(payload.CcYear),
++				CreditCardCvv:             int32(payload.CcCVV)},
+ 			UserId:       sessionID(r),
+ 			UserCurrency: currentCurrency(r),
+ 			Address: &pb.Address{
+-				StreetAddress: streetAddress,
+-				City:          city,
+-				State:         state,
+-				ZipCode:       int32(zipCode),
+-				Country:       country},
++				StreetAddress: payload.StreetAddress,
++				City:          payload.City,
++				State:         payload.State,
++				ZipCode:       int32(payload.ZipCode),
++				Country:       payload.Country},
+ 		})
+ 	if err != nil {
+ 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to complete the order"), http.StatusInternalServerError)
+@@ -422,13 +444,18 @@ func (fe *frontendServer) logoutHandler(w http.ResponseWriter, r *http.Request)
+ func (fe *frontendServer) setCurrencyHandler(w http.ResponseWriter, r *http.Request) {
+ 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
+ 	cur := r.FormValue("currency_code")
+-	log.WithField("curr.new", cur).WithField("curr.old", currentCurrency(r)).
++	payload := validator.SetCurrencyPayload{Currency: cur}
++	if err := payload.Validate(); err != nil {
++		renderHTTPError(log, r, w, validator.ValidationErrorResponse(err), http.StatusUnprocessableEntity)
++		return
++	}
++	log.WithField("curr.new", payload.Currency).WithField("curr.old", currentCurrency(r)).
+ 		Debug("setting currency")
+ 
+-	if cur != "" {
++	if payload.Currency != "" {
+ 		http.SetCookie(w, &http.Cookie{
+ 			Name:   cookieCurrency,
+-			Value:  cur,
++			Value:  payload.Currency,
+ 			MaxAge: cookieMaxAge,
+ 		})
+ 	}
+diff --git a/src/frontend/validator/validator.go b/src/frontend/validator/validator.go
+new file mode 100644
+index 00000000000..0821fbdc691
+--- /dev/null
++++ b/src/frontend/validator/validator.go
+@@ -0,0 +1,83 @@
++// Copyright 2024 Google LLC
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//      http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++package validator
++
++import (
++	"errors"
++	"fmt"
++
++	"github.com/go-playground/validator/v10"
++)
++
++var validate *validator.Validate
++
++// init() is a special function that will run when this package is imported.
++// It instantiates a SINGLE instance of *validator.Validate with the added
++// benefit of caching struct info and validations.
++func init() {
++	validate = validator.New(validator.WithRequiredStructEnabled())
++}
++
++type Payload interface {
++	Validate() error
++}
++
++type AddToCartPayload struct {
++	Quantity  uint64 `validate:"required,gte=1,lte=10"`
++	ProductID string `validate:"required"`
++}
++
++type PlaceOrderPayload struct {
++	Email         string `validate:"required,email"`
++	StreetAddress string `validate:"required,max=512"`
++	ZipCode       int64  `validate:"required"`
++	City          string `validate:"required,max=128"`
++	State         string `validate:"required,max=128"`
++	Country       string `validate:"required,max=128"`
++	CcNumber      string `validate:"required,credit_card"`
++	CcMonth       int64  `validate:"required,gte=1,lte=12"`
++	CcYear        int64  `validate:"required"`
++	CcCVV         int64  `validate:"required"`
++}
++
++type SetCurrencyPayload struct {
++	Currency string `validate:"required,iso4217"`
++}
++
++// Implementations of the 'Payload' interface.
++func (ad *AddToCartPayload) Validate() error {
++	return validate.Struct(ad)
++}
++
++func (po *PlaceOrderPayload) Validate() error {
++	return validate.Struct(po)
++}
++
++func (sc *SetCurrencyPayload) Validate() error {
++	return validate.Struct(sc)
++}
++
++// Reusable error response function.
++func ValidationErrorResponse(err error) error {
++	validationErrs, ok := err.(validator.ValidationErrors)
++	if !ok {
++		return errors.New("invalid validation error format")
++	}
++	var msg string
++	for _, err := range validationErrs {
++		msg += fmt.Sprintf("Field '%s' is invalid: %s\n", err.Field(), err.Tag())
++	}
++	return fmt.Errorf(msg)
++}
+diff --git a/src/frontend/validator/validator_test.go b/src/frontend/validator/validator_test.go
+new file mode 100644
+index 00000000000..429c52a560c
+--- /dev/null
++++ b/src/frontend/validator/validator_test.go
+@@ -0,0 +1,185 @@
++// Copyright 2024 Google LLC
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//      http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++package validator
++
++import (
++	"strings"
++	"testing"
++)
++
++func TestPlaceOrderPassesValidation(t *testing.T) {
++	tests := []struct {
++		name          string
++		email         string
++		streetAddress string
++		zipCode       int64
++		city          string
++		state         string
++		country       string
++		ccNumber      string
++		ccMonth       int64
++		ccYear        int64
++		ccCVV         int64
++	}{
++		{"valid", "test@example.com", "12345 example street", 10004, "New York", "New York", "United States", "5272940000751666", 4, 2024, 584},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			payload := PlaceOrderPayload{
++				Email:         tt.email,
++				StreetAddress: tt.streetAddress,
++				ZipCode:       tt.zipCode,
++				City:          tt.city,
++				State:         tt.state,
++				Country:       tt.country,
++				CcNumber:      tt.ccNumber,
++				CcMonth:       tt.ccMonth,
++				CcYear:        tt.ccYear,
++				CcCVV:         tt.ccCVV,
++			}
++			if err := payload.Validate(); err != nil {
++				t.Errorf("want validation on %v, got %v", payload, err)
++			}
++		})
++	}
++}
++
++func TestPlaceOrderFailsValidation(t *testing.T) {
++	tests := []struct {
++		name          string
++		email         string
++		streetAddress string
++		zipCode       int64
++		city          string
++		state         string
++		country       string
++		ccNumber      string
++		ccMonth       int64
++		ccYear        int64
++		ccCVV         int64
++	}{
++		{"invalid email", "test@example", "12345 example street", 10004, "New York", "New York", "United States", "5272940000751666", 4, 2024, 584},
++		{"invalid address (too long)", "test@example.com", strings.Repeat("12345 example street", 513), 10004, "New York", "New York", "United States", "5272940000751666", 4, 2024, 584},
++		{"invalid zip code", "test@example.com", "12345 example street", 0, "New York", "New York", "United States", "5272940000751666", 4, 2024, 584},
++		{"invalid city", "test@example.com", "12345 example street", 10004, "", "New York", "United States", "5272940000751666", 4, 2024, 584},
++		{"invalid state", "test@example.com", "12345 example street", 10004, "New York", "", "United States", "5272940000751666", 4, 2024, 584},
++		{"invalid country", "test@example.com", "12345 example street", 10004, "New York", "New York", "", "5272940000751666", 4, 2024, 584},
++		{"invalid ccNumber", "test@example.com", "12345 example street", 10004, "New York", "New York", "United States", "5272940000", 4, 2024, 584},
++		{"invalid ccMonth (month < 1)", "test@example.com", "12345 example street", 10004, "New York", "New York", "United States", "5272940000751666", 0, 2024, 584},
++		{"invalid ccMonth (month > 12)", "test@example.com", "12345 example street", 10004, "New York", "New York", "United States", "5272940000751666", 13, 2024, 584},
++		{"invalid ccYear (not provided)", "test@example.com", "12345 example street", 10004, "New York", "New York", "United States", "5272940000751666", 12, 0, 584},
++		{"invalid ccCVV (not provided)", "test@example.com", "12345 example street", 10004, "New York", "New York", "United States", "5272940000751666", 12, 2024, 0},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			payload := PlaceOrderPayload{
++				Email:         tt.email,
++				StreetAddress: tt.streetAddress,
++				ZipCode:       tt.zipCode,
++				City:          tt.city,
++				State:         tt.state,
++				Country:       tt.country,
++				CcNumber:      tt.ccNumber,
++				CcMonth:       tt.ccMonth,
++				CcYear:        tt.ccYear,
++				CcCVV:         tt.ccCVV,
++			}
++			if err := payload.Validate(); err == nil {
++				t.Errorf("want validation on %v, got %v", payload, err)
++			}
++		})
++	}
++}
++
++func TestAddToCartPassesValidation(t *testing.T) {
++	tests := []struct {
++		name      string
++		quantity  uint64
++		productID string
++	}{
++		{"valid min quantity and product id", 1, "OLJCESPC7Z"},
++		{"valid max quantity and product id", 10, "OLJCESPC7Z"},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			payload := AddToCartPayload{Quantity: tt.quantity, ProductID: tt.productID}
++			if err := payload.Validate(); err != nil {
++				t.Errorf("want validation on %v, got %v", payload, err)
++			}
++		})
++	}
++}
++
++func TestAddToCartFailsValidation(t *testing.T) {
++	tests := []struct {
++		name      string
++		quantity  uint64
++		productID string
++	}{
++		{"invalid min quantity", 0, "OLJCESPC7Z"},
++		{"invalid max quantity", 11, "OLJCESPC7Z"},
++		{"invalid product id", 1, ""},
++		{"invalid quantity and product id", 0, ""},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			payload := AddToCartPayload{Quantity: tt.quantity, ProductID: tt.productID}
++			if err := payload.Validate(); err == nil {
++				t.Errorf("want validation on %v, got %v", payload, err)
++			}
++		})
++	}
++}
++
++func TestSetCurrencyPassesValidation(t *testing.T) {
++	tests := []struct {
++		name     string
++		currency string
++	}{
++		{"valid currency (EUR)", "EUR"},
++		{"valid currency (USD)", "USD"},
++		{"valid currency (JPY)", "JPY"},
++		{"valid currency (GBP)", "GBP"},
++		{"valid currency (TRY)", "TRY"},
++		{"valid currency (CAD)", "CAD"},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			payload := SetCurrencyPayload{Currency: tt.currency}
++			if err := payload.Validate(); err != nil {
++				t.Errorf("want validation on %v, got %v", payload, err)
++			}
++		})
++	}
++}
++
++func TestSetCurrencyFailsValidation(t *testing.T) {
++	tests := []struct {
++		name     string
++		currency string
++	}{
++		{"invalid currency", "ABC"},
++		{"invalid currency (symbol)", "$"},
++		{"invalid (no currency)", ""},
++	}
++	for _, tt := range tests {
++		t.Run(tt.name, func(t *testing.T) {
++			payload := SetCurrencyPayload{Currency: tt.currency}
++			if err := payload.Validate(); err == nil {
++				t.Errorf("want validation on %v, got %v", payload, err)
++			}
++		})
++	}
++}
+diff --git a/src/loadgenerator/locustfile.py b/src/loadgenerator/locustfile.py
+index 8522522926f..d91532a77bb 100644
+--- a/src/loadgenerator/locustfile.py
++++ b/src/loadgenerator/locustfile.py
+@@ -50,7 +50,7 @@ def addToCart(l):
+     l.client.get("/product/" + product)
+     l.client.post("/cart", {
+         'product_id': product,
+-        'quantity': random.randint(1,100)})
++        'quantity': random.randint(1,10)})
+     
+ def empty_cart(l):
+     l.client.post('/cart/empty')

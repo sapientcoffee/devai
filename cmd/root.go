@@ -23,6 +23,7 @@ import (
 	"buildey/cmd/info"
 	"buildey/cmd/release"
 	"buildey/cmd/review"
+	"buildey/cmd/inspect"
 
 	log "github.com/sirupsen/logrus"
 
@@ -81,6 +82,7 @@ func init() {
 	rootCmd.AddCommand(review.ReviewCmd)
 	rootCmd.AddCommand(release.ReleaseCmd)
 	rootCmd.AddCommand(document.DocumentCmd)
+	rootCmd.AddCommand(inspect.InspectCmd)
 	rootCmd.AddCommand(info.InfoCmd)
 
 	rootCmd.Root().CompletionOptions.DisableDefaultCmd = true

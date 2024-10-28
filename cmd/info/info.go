@@ -28,9 +28,24 @@ var InfoCmd = &cobra.Command{
 	Short:   "Info command and test",
 	Long: `A useful command to view details and information about the CLI.
 	
-	It is alos a useful subcommand to test the CLI is working`,
+	It is also a useful subcommand to test the CLI is working`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Current implementation of info command is limited.")
+		logo := `                                  
+			#####  ###### #    #   ##   # 
+			#    # #      #    #  #  #  # 
+			#    # #####  #    # #    # # 
+			#    # #      #    # ###### # 
+			#    # #       #  #  #    # # 
+			#####  ######   ##   #    # # 
+										
+				`
+
+    fmt.Printf("%s\n", logo)
+    fmt.Println("devai is a CLI tool built to streamline developer workflows.")
+    fmt.Println("It offers a range of commands and features designed to make")
+    fmt.Println("development tasks easier and more efficient leveraging GenAI.")
+    fmt.Println("\nCurrent implementation of info command is limited.")
+    fmt.Println("For more information, visit [link to documentation]") 
 	},
 }
 

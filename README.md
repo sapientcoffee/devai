@@ -1,7 +1,7 @@
 
 A number of ways exist to interact with generative AI, the ones that spiring to most peopls minds are chat or within the IDE.
 
-![](docs/images/Generative_AI_API.png)
+![](./docs/images/GenAI-interactions.png)
 
 This is a prtotype CLI, that can be used standalone to included in automation workflows (CI/CD for example), that has GenAI integrated. It is a go variant of an open source 20% project I am involved in ([genai-for-developers](https://github.com/GoogleCloudPlatform/genai-for-developers)).
 
